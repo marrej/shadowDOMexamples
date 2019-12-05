@@ -1,0 +1,52 @@
+<head>
+</head>
+<body>
+    <style>
+    p {
+        padding: 20px;
+        background-color:red;
+    }
+    </style>
+    <script>
+    // custom Element definition
+    customElements.define('our-custom-element',
+        class extends HTMLElement {
+            constructor() {
+            super();
+
+            // create div html element
+            var div = document.createElement('div');
+
+            // fill div with html 
+            div.innerHTML = "<p> Custom Element </p>";
+
+            // create style html element
+            var style = document.createElement('style');
+
+            // add style data
+            style.textContent = `
+                p {
+                padding: 20px;
+                background-color:green;
+                }
+            `;
+
+            // create shadowRoot from this element
+            const shadowRoot = this.attachShadow({mode: 'open'});
+            
+            // append our DIV as a child to it
+            shadowRoot.appendChild(div);
+
+            // append our STYLE as a child to it
+            shadowRoot.appendChild(style);
+            }
+        }
+        );
+    </script>
+    <our-custom-element></our-custom-element>
+    <p>One Paragraph1</p>
+    <p>One Paragraph2</p>
+    <p>One Paragraph3</p>
+    <p>One Paragraph4</p>
+    <p>One Paragraph5</p>
+</body>
