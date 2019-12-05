@@ -1,38 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <script src="./component.js"></script>
-</head>
-<body>
-<script>
-    customElements.define('our-custom-element',
-        class extends HTMLElement {
-            constructor() {
-            super();
-            var style = document.createElement('style');
-            var div = document.createElement('div');
-            div.innerHTML = `<web-component jwt="123"></web-component>`;
-            var template = document.getElementById('#forCustom');
-            const shadowRoot = this.attachShadow({mode: 'open'});
-            shadowRoot.appendChild(style);
-            shadowRoot.appendChild(div);
-            shadowRoot.querySelector("web-component").addEventListener('notify', (e) => {
-            console.log(`Notified from element definition : ${JSON.stringify(e)}`);
-            })
-            }
-        }
-    );
-</script>
-<script>
-    window.onload = () => {
-        const shadowRoot = document.querySelector("our-custom-element").shadowRoot;
-        const element = shadowRoot.querySelector("web-component");
-        console.log(element);
-        element.addEventListener('notify', (e) => {
-            console.log(`Notified from outside query : ${JSON.stringify(e)}`);
-        })
-    };
-</script>
-<our-custom-element></our-custom-element>
-</body>
+    <head>
+        <script src="./component.js"></script>
+    </head>
+    <body>
+        <script>
+            // definition of our custom element
+            customElements.define('our-custom-element',
+                class extends HTMLElement {
+                    constructor() {
+                    super();
+
+                    // create div element
+                    var div = document.createElement('div');
+                    // fill it with HTML, which contains reference to our WEB component
+                    div.innerHTML = `<web-component jwt="123"></web-component>`;
+
+                    // create shadowRoot from this element
+                    const shadowRoot = this.attachShadow({mode: 'open'});
+
+                    // append our DIV as a child to it
+                    shadowRoot.appendChild(div);
+
+                    // query our webcomponent, and attach eventListener
+                    shadowRoot.querySelector("web-component").addEventListener('notify', (e) => {
+                        console.log(`Notified from element definition : ${JSON.stringify(e)}`);
+                    })
+                    }
+                }
+            );
+        </script>
+        <script>
+            // querying from outside of the shadowDom definition
+            window.onload = () => {
+
+                // get the shadowRoot
+                const shadowRoot = document.querySelector("our-custom-element").shadowRoot;
+
+                // query the element from the shadowDom
+                const element = shadowRoot.querySelector("web-component");
+
+                // attach the event listener to the element
+                element.addEventListener('notify', (e) => {
+                    console.log(`Notified from outside query : ${JSON.stringify(e)}`);
+                })
+            };
+        </script>
+        <our-custom-element></our-custom-element>
+    </body>
 </html>
